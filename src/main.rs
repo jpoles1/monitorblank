@@ -14,7 +14,7 @@ use std::time::{Instant, Duration};
 use std::process::Command;
 
 //Time required between blanks; security measure
-const RATE_LIMIT:u64 = 120;
+const RATE_LIMIT:u64 = 30;
 //Setup persistent timer
 #[derive(Copy, Clone)]
 pub struct LastVisit;
@@ -49,6 +49,6 @@ fn main() {
     let now = Instant::now() - Duration::new(RATE_LIMIT, 0);
     let mut chain = Chain::new(router);
     chain.link(State::<LastVisit>::both(now));
-    Iron::new(chain).http("localhost:51339").unwrap();
+    Iron::new(chain).http("192.168.1.150:51339").unwrap();
     println!("Listening on port 51339.");
 }
