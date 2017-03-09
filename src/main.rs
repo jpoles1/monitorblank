@@ -25,6 +25,11 @@ fn blank_screen(){
     .arg("-c").arg("xset dpms force off")
     .output().expect("Failed to execute process");
 }
+fn mute_sound(){
+    Command::new("sh")
+    .arg("-c").arg("amixer -D pulse set Master toggle")
+    .output().expect("Failed to execute process");
+}
 fn blank_server(req: &mut Request) -> IronResult<Response> {
     println!("{:?}", req);
     let mutex = req.get::<State<LastVisit>>().unwrap();
@@ -35,6 +40,7 @@ fn blank_server(req: &mut Request) -> IronResult<Response> {
         println!("Time elapsed since last blank: {:?}", since_last.as_secs());
         if since_last > Duration::new(RATE_LIMIT, 0) {
             blank_screen();
+            mute_sound();
         }
     }
     {
